@@ -3,7 +3,5 @@ export type NonEmptyString = string & {
 }
 
 export function isNonEmptyString(a: any): a is NonEmptyString {
-  const result = typeof a === 'string' && a.length !== 0
-  console.log('isNonEmptyString', result)
-  return result
+  return typeof a === 'string' && a.length !== 0
 }
