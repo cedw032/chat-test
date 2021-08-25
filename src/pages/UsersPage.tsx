@@ -1,3 +1,9 @@
+import CenteredContent from '../layout/CenteredContent'
+
 export default function UsersPage() {
-  return <>Users Page</>
+  return (
+    <CenteredContent>
+      <>Users Page</>
+    </CenteredContent>
+  )
 }

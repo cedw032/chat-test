@@ -1,3 +1,9 @@
+import CenteredContent from '../layout/CenteredContent'
+
 export default function NotFoundPage() {
-    return <>Page not found</>
+  return (
+    <CenteredContent>
+      <>Page not found</>
+    </CenteredContent>
+  )
 }
