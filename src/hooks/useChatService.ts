@@ -9,10 +9,8 @@ import type { NonEmptyString } from '../common/NonEmptyString'
 import type { UtcDateTime } from '../time/UtcDateTime'
 
 import { serviceError } from '../errors/serviceError'
-import { isMessage } from '../entities/message'
 import { loading } from '../common/Loading'
 import api from '../api'
-import { transform } from '@babel/core'
 
 type ChatService = {
   messages: Array<Message>

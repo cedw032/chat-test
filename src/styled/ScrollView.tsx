@@ -32,7 +32,7 @@ export default function ScrollView({
         },
       } as const)
     }
-  }, [])
+  }, [setRef])
 
   return (
     <div
