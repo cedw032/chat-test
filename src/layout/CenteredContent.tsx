@@ -22,7 +22,7 @@ const contentStyle = {
   height: 536,
   filter: `drop-shadow(0px 3px 20px ${palette.shadowColor}`,
   padding: 14,
-  overflow: 'auto',
+  overflow: 'hidden',
 } as const
 
 export default function CenteredContent({ children }: CenteredContentProps) {

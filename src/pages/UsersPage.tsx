@@ -6,6 +6,7 @@ import { isLoading } from '../common/Loading'
 import useUserList from '../hooks/useUserList'
 import CenteredContent from '../layout/CenteredContent'
 import UserListItem from '../styled/UserListItem'
+import ScrollView from '../styled/ScrollView'
 
 const userListStyle = {
   width: '100%',
@@ -39,7 +40,7 @@ export default function UsersPage() {
   return (
     <CenteredContent>
       <div style={userListStyle}>
-        <div>
+        <ScrollView>
           {userList.map((user, i) => (
             <UserListItem
               key={i}
@@ -49,7 +50,7 @@ export default function UsersPage() {
               }}
             />
           ))}
-        </div>
+        </ScrollView>
       </div>
     </CenteredContent>
   )

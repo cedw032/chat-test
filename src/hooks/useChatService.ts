@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import type { Loading } from '../common/Loading'
 import type { ServiceError } from '../errors/serviceError'
 import type { Message, MessageId } from '../entities/message'
@@ -65,18 +67,21 @@ type ChatService = {
   sendMessage: (message: NonEmptyString) => void
 }
 
-const newMessages: Array<Message> = []
-
 export default function useChatService(
   userId: UserId,
 ): ChatService | ServiceError | Loading {
+  const [newMessages, setNewMessages] = useState<Array<Message>>([])
+
   function sendMessage(message: NonEmptyString): void {
-    newMessages.push({
-      createdAt: new Date().toISOString() as UtcDateTime,
-      message,
-      userId,
-      id: `${mockMessages.length + newMessages.length}` as MessageId,
-    })
+    setNewMessages([
+      ...newMessages,
+      {
+        createdAt: new Date().toISOString() as UtcDateTime,
+        message,
+        userId,
+        id: `${mockMessages.length + newMessages.length}` as MessageId,
+      },
+    ])
   }
 
   if (mockMessages.every(isMessage)) {
