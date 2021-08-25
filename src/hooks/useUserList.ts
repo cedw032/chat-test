@@ -1,40 +1,45 @@
+import { useState, useEffect } from 'react'
+
 import type { Loading } from '../common/Loading'
 import type { ServiceError } from '../errors/serviceError'
 import type { User } from '../entities/user'
-import type { NonEmptyString } from '../common/NonEmptyString'
 
-import { isUser } from '../entities/user'
+import { serviceError, isServiceError } from '../errors/serviceError'
+import { loading } from '../common/Loading'
 
-const mockUsers = [
-  {
-    createdAt: '2021-08-04T22:08:33.505Z',
-    avatar: 'https://cdn.fakercloud.com/avatars/osvaldas_128.jpg',
-    firstName: 'Eusebio',
-    lastName: 'Mante',
-    id: '1',
-  },
-  {
-    createdAt: '2021-08-05T03:26:56.798Z',
-    avatar: 'https://cdn.fakercloud.com/avatars/thiagovernetti_128.jpg',
-    firstName: 'Dangelo',
-    lastName: 'Cormier',
-    id: '2',
-  },
-  {
-    createdAt: '2021-08-16T15:54:37.321Z',
-    avatar: 'https://cdn.fakercloud.com/avatars/xiel_128.jpg',
-    firstName: 'Ben',
-    lastName: 'Dover',
-    id: '3',
-  },
-] as Array<any>
+import api from '../api'
 
 export default function useUserList(): Array<User> | ServiceError | Loading {
-  if (mockUsers.every(isUser)) {
-    return mockUsers
+  const [hasLoaded, setHasLoaded] = useState(false)
+  const [users, setUsers] = useState<Array<User>>([])
+  const [error, setError] = useState<ServiceError>()
+
+  useEffect(() => {
+    api.users
+      .list()
+      .then((users) => {
+        if (isServiceError(users)) {
+          throw users
+        }
+        setUsers(users)
+        setHasLoaded(true)
+      })
+      .catch((e) => {
+        if (isServiceError(e)) {
+          setError(e)
+        } else {
+          setError(serviceError('failed to load users'))
+        }
+      })
+  }, [setHasLoaded, setUsers, setError])
+
+  if (error) {
+    return error
   }
 
-  return {
-    messageForUser: 'user list from api contained bad data' as NonEmptyString,
-  } as const
+  if (!hasLoaded) {
+    return loading
+  }
+
+  return users
 }

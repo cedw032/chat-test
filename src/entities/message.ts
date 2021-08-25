@@ -29,3 +29,12 @@ export function isMessageId(a: any): a is UserId {
     typeof a === 'string' && !isNaN(+a - +a) && a.indexOf('.') === -1 && +a > 0
   )
 }
+
+export function fromApiMessage(a: any): object {
+  return {
+    createdAt: a?.createdAt,
+    message: a?.message,
+    userId: `${a?.userID}`,
+    id: a?.id,
+  }
+}

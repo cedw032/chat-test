@@ -31,7 +31,7 @@ export default function ChatBox({ userId }: ChatBoxProps) {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToBottom()
     }
-  }, [])
+  }, [chatService, scrollViewRef])
 
   if (isServiceError(chatService)) {
     return <>{chatService.messageForUser}</>
@@ -57,15 +57,7 @@ export default function ChatBox({ userId }: ChatBoxProps) {
           />
         ))}
       </ScrollView>
-      <MessageInput
-        sendMessage={(message) => {
-          sendMessage(message)
-          if (scrollViewRef.current) {
-            scrollViewRef.current.scrollToBottom()
-          }
-        }}
-        style={messageInputStyle}
-      />
+      <MessageInput sendMessage={sendMessage} style={messageInputStyle} />
     </div>
   )
 }
