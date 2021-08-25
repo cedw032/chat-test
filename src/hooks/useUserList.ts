@@ -1,3 +1,4 @@
+import type { Loading } from '../common/Loading'
 import type { ServiceError } from '../errors/serviceError'
 import type { User } from '../entities/user'
 import type { NonEmptyString } from '../common/NonEmptyString'
@@ -28,7 +29,7 @@ const mockUsers = [
   },
 ] as Array<any>
 
-export default function useUserList(): Array<User> | ServiceError {
+export default function useUserList(): Array<User> | ServiceError | Loading {
   if (mockUsers.every(isUser)) {
     return mockUsers
   }

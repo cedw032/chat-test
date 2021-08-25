@@ -2,6 +2,7 @@ import { useHistory } from 'react-router-dom'
 
 import paths from '../config/paths'
 import { isServiceError } from '../errors/serviceError'
+import { isLoading } from '../common/Loading'
 import useUserList from '../hooks/useUserList'
 import CenteredContent from '../layout/CenteredContent'
 import UserListItem from '../styled/UserListItem'
@@ -16,28 +17,37 @@ const userListStyle = {
 } as const
 
 export default function UsersPage() {
-  const userListOrError = useUserList()
+  const userList = useUserList()
   const history = useHistory()
 
-  if (isServiceError(userListOrError)) {
-    const serviceError = userListOrError
+  if (isServiceError(userList)) {
     return (
       <CenteredContent>
-        <>{serviceError.messageForUser}</>
+        <>{userList.messageForUser}</>
       </CenteredContent>
     )
   }
 
-  const userList = userListOrError
+  if (isLoading(userList)) {
+    return (
+      <CenteredContent>
+        <>Loading...</>
+      </CenteredContent>
+    )
+  }
 
   return (
     <CenteredContent>
       <div style={userListStyle}>
         <div>
           {userList.map((user, i) => (
-            <UserListItem key={i} user={user} onClick={() => {
-              history.push(paths.chat.replace(':userId', user.id));
-            }} />
+            <UserListItem
+              key={i}
+              user={user}
+              onClick={() => {
+                history.push(paths.chat.replace(':userId', user.id))
+              }}
+            />
           ))}
         </div>
       </div>
