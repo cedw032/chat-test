@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import useLocalState from './useLocalState'
 
 import type { Loading } from '../common/Loading'
 import type { ServiceError } from '../errors/serviceError'
@@ -70,7 +70,10 @@ type ChatService = {
 export default function useChatService(
   userId: UserId,
 ): ChatService | ServiceError | Loading {
-  const [newMessages, setNewMessages] = useState<Array<Message>>([])
+  const [newMessages, setNewMessages] = useLocalState<Array<Message>>(
+    'chat-messages',
+    [],
+  )
 
   function sendMessage(message: NonEmptyString): void {
     setNewMessages([
