@@ -1,7 +1,10 @@
-import { isLoading } from '../common/Loading'
+import { useRef, useEffect } from 'react'
+
+import type { ScrollViewInterface } from './ScrollView'
 import type { UserId } from '../entities/user'
 
 import { isServiceError } from '../errors/serviceError'
+import { isLoading } from '../common/Loading'
 
 import useChatService from '../hooks/useChatService'
 import Message from './Message'
@@ -14,7 +17,7 @@ type ChatBoxProps = {
 
 const messageInputStyle = {
   height: '50px',
-  bottom: 0
+  bottom: 0,
 } as const
 
 const scrollViewStyle = {
@@ -23,6 +26,12 @@ const scrollViewStyle = {
 
 export default function ChatBox({ userId }: ChatBoxProps) {
   const chatService = useChatService(userId)
+  const scrollViewRef = useRef<ScrollViewInterface>()
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToBottom()
+    }
+  }, [])
 
   if (isServiceError(chatService)) {
     return <>{chatService.messageForUser}</>
@@ -36,7 +45,10 @@ export default function ChatBox({ userId }: ChatBoxProps) {
 
   return (
     <div style={{ height: '100%' }}>
-      <ScrollView style={scrollViewStyle}>
+      <ScrollView
+        style={scrollViewStyle}
+        setRef={(r) => (scrollViewRef.current = r)}
+      >
         {messages.map((message, i) => (
           <Message
             key={i}
@@ -45,7 +57,15 @@ export default function ChatBox({ userId }: ChatBoxProps) {
           />
         ))}
       </ScrollView>
-      <MessageInput sendMessage={sendMessage} style={messageInputStyle} />
+      <MessageInput
+        sendMessage={(message) => {
+          sendMessage(message)
+          if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToBottom()
+          }
+        }}
+        style={messageInputStyle}
+      />
     </div>
   )
 }

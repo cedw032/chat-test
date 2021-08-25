@@ -95,7 +95,8 @@ export default function useChatService(
   }
 
   console.warn(
-    'API is returning inconsistent types for user id, that si why we have to do this',
+    // TODO: return consistent types from the API
+    'API is returning inconsistent types for user id, that is why we have to do this',
   )
   const transformed = mockMessages.map(transformApiMessage)
   if (transformed.every(isMessage)) {
